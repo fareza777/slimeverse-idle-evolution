@@ -83,6 +83,7 @@ fun SplashScreen(onDone: () -> Unit) {
 private fun F7SplashVideo(onFinished: () -> Unit) {
     val context = LocalContext.current
     var failed by remember { mutableStateOf(false) }
+    var rendering by remember { mutableStateOf(false) }
     val player = remember { mutableStateOf<MediaPlayer?>(null) }
 
     DisposableEffect(Unit) {
@@ -105,6 +106,10 @@ private fun F7SplashVideo(onFinished: () -> Unit) {
                                     mp.setSurface(holder.surface)
                                     mp.setVolume(0f, 0f)
                                     mp.setOnCompletionListener { onFinished() }
+                                    mp.setOnInfoListener { _, what, _ ->
+                                        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) rendering = true
+                                        false
+                                    }
                                     mp.setOnErrorListener { _, _, _ -> failed = true; true }
                                     mp.start()
                                     player.value = mp
@@ -121,7 +126,9 @@ private fun F7SplashVideo(onFinished: () -> Unit) {
                 },
             )
         }
-        if (failed) {
+        // Cover the surface with the official final frame until video renders (or on failure),
+        // so the splash never shows a black frame.
+        if (failed || !rendering) {
             Image(
                 painter = painterResource(R.drawable.f7_splash_final),
                 contentDescription = "F7 Developer",

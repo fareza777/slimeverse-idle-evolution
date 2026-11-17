@@ -14,15 +14,8 @@ class ConsentManager(private val context: Context) {
 
     fun gatherConsent(activity: Activity, onDone: () -> Unit) {
         val params = ConsentRequestParameters.Builder().build()
-        consentInfo.requestConsentInfoUpdate(
-            activity, params,
-            {
-                UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) {
-                    onDone()
-                }
-            },
-            { onDone() },
-        )
+        // Gather consent state silently and go straight into the game — no choice screen.
+        consentInfo.requestConsentInfoUpdate(activity, params, { onDone() }, { onDone() })
     }
 
     fun reset() { consentInfo.reset() }

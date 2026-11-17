@@ -26,13 +26,18 @@ import com.f7developer.slimeverse.game.Rarity
 import com.f7developer.slimeverse.ui.theme.LocalExtraColors
 
 fun formatNum(n: Long): String = when {
-    n >= 1_000_000_000 -> String.format("%.2fB", n / 1e9)
-    n >= 1_000_000 -> String.format("%.2fM", n / 1e6)
-    n >= 10_000 -> String.format("%.1fK", n / 1e3)
+    n >= 1_000_000_000 -> String.format(java.util.Locale.US, "%.2fB", n / 1e9)
+    n >= 1_000_000 -> String.format(java.util.Locale.US, "%.2fM", n / 1e6)
+    n >= 10_000 -> String.format(java.util.Locale.US, "%.1fK", n / 1e3)
     else -> n.toString()
 }
 
 fun formatNum(n: Int): String = formatNum(n.toLong())
+
+/** Locale-independent one-decimal formatting (English game shows 0.0, not 0,0). */
+fun fmt1(x: Double): String = String.format(java.util.Locale.US, "%.1f", x)
+fun fmt0(x: Double): String = String.format(java.util.Locale.US, "%.0f", x)
+fun fmt2(x: Double): String = String.format(java.util.Locale.US, "%.2f", x)
 
 @Composable
 fun GameCard(
@@ -86,7 +91,7 @@ fun PrimaryButton(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (icon != null) Icon(icon, null, tint = Color.White, modifier = Modifier.size(20.dp))
-            Text(text, color = if (enabled) Color.White else Color.White.copy(alpha = 0.6f), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text, color = if (enabled) Color.White else Color.White.copy(alpha = 0.6f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
     }
 }
@@ -111,7 +116,7 @@ fun SoftButton(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             if (icon != null) Icon(icon, null, tint = tint, modifier = Modifier.size(18.dp))
-            Text(text, color = tint, fontWeight = FontWeight.Bold, fontSize = 13.5.sp)
+            Text(text, color = tint, fontWeight = FontWeight.Bold, fontSize = 14.5.sp)
         }
     }
 }
@@ -134,8 +139,8 @@ fun ResourcePill(icon: ImageVector, value: String, tint: Color, label: String? =
             .border(1.dp, LocalExtraColors.current.line, RoundedCornerShape(12.dp))
             .padding(horizontal = 10.dp, vertical = 6.dp),
     ) {
-        Icon(icon, label, tint = tint, modifier = Modifier.size(16.dp))
-        Text(value, fontWeight = FontWeight.ExtraBold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
+        Icon(icon, label, tint = tint, modifier = Modifier.size(17.dp))
+        Text(value, fontWeight = FontWeight.ExtraBold, fontSize = 14.5.sp, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -148,7 +153,7 @@ fun ElementBadge(element: Element, small: Boolean = false) {
             .background(col.copy(alpha = 0.16f))
             .padding(horizontal = if (small) 6.dp else 8.dp, vertical = if (small) 2.dp else 4.dp),
     ) {
-        Text(element.displayName, color = col, fontWeight = FontWeight.Bold, fontSize = if (small) 10.5.sp else 12.sp)
+        Text(element.displayName, color = col, fontWeight = FontWeight.Bold, fontSize = if (small) 12.sp else 13.sp)
     }
 }
 
@@ -161,7 +166,7 @@ fun RarityBadge(rarity: Rarity, small: Boolean = false) {
             .background(col.copy(alpha = 0.16f))
             .padding(horizontal = if (small) 6.dp else 8.dp, vertical = if (small) 2.dp else 4.dp),
     ) {
-        Text(rarity.displayName, color = col, fontWeight = FontWeight.Bold, fontSize = if (small) 10.5.sp else 12.sp)
+        Text(rarity.displayName, color = col, fontWeight = FontWeight.Bold, fontSize = if (small) 12.sp else 13.sp)
     }
 }
 
@@ -174,8 +179,8 @@ fun StatChip(label: String, value: String, tint: Color, modifier: Modifier = Mod
             .padding(horizontal = 10.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(value, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
-        Text(label, fontSize = 11.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+        Text(value, fontWeight = FontWeight.ExtraBold, fontSize = 16.5.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(label, fontSize = 12.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -244,6 +249,6 @@ fun TraitChip(trait: com.f7developer.slimeverse.game.Trait) {
             .background(MaterialTheme.colorScheme.tertiaryContainer)
             .padding(horizontal = 10.dp, vertical = 5.dp),
     ) {
-        Text(trait.displayName, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
+        Text(trait.displayName, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiaryContainer)
     }
 }

@@ -27,7 +27,13 @@ fun AppRoot(repo: GameRepository) {
         SlimeverseTheme(theme) {
             Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                 val nav = rememberNavController()
-                NavHost(navController = nav, startDestination = "splash") {
+                NavHost(
+                    navController = nav, startDestination = "splash",
+                    enterTransition = { androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(300)) + androidx.compose.animation.slideInHorizontally(androidx.compose.animation.core.tween(300)) { it / 7 } },
+                    exitTransition = { androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(220)) },
+                    popEnterTransition = { androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(300)) },
+                    popExitTransition = { androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(220)) + androidx.compose.animation.slideOutHorizontally(androidx.compose.animation.core.tween(220)) { it / 7 } },
+                ) {
                     composable("splash") {
                         SplashScreen(onDone = {
                             val dest = if (repo.state.onboardingDone) "root" else "onboarding"

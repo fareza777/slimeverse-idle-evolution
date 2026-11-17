@@ -63,6 +63,7 @@ fun BattleScene(
     val bursts = remember { mutableStateListOf<Burst>() }
     val projectiles = remember { mutableStateListOf<Projectile>() }
     val shake = remember { mutableStateOf(0f) }
+    val unitByIndex = remember(ab.seed) { ab.battle.units.associateBy { it.index } }
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -117,7 +118,7 @@ fun BattleScene(
                             val from = unitPos(e.from)
                             val a = anims.getOrPut(e.from) { UnitAnim() }
                             a.lungeUntil = now + 260; a.lungeDir = if (e.from < 100) 1f else -1f; a.mood = Mood.ATTACK
-                            val col = when (e.effect) { "heal" -> Color(0xFF66BB6A); "shield" -> Color(0xFF42A5F5); else -> Color(ab.battle.units[e.from].visual.element.color) }
+                            val col = when (e.effect) { "heal" -> Color(0xFF66BB6A); "shield" -> Color(0xFF42A5F5); else -> Color(unitByIndex[e.from]?.visual?.element?.color ?: 0xFF7C4DFF) }
                             e.targets.forEachIndexed { i, ti ->
                                 val to = unitPos(ti)
                                 val t = anims.getOrPut(ti) { UnitAnim() }
@@ -178,19 +179,13 @@ fun BattleScene(
         val shakeX = if (shake.value > 0) (Random(now).nextFloat() - 0.5f) * shake.value * density else 0f
         val shakeY = if (shake.value > 0) (Random(now + 1).nextFloat() - 0.5f) * shake.value * density else 0f
 
-        // background
+        // animated living background (drifting clouds, parallax hills, themed particles)
+        LivingBackground(
+            Modifier.fillMaxSize(),
+            top = Color(zone.bgTop), bottom = Color(zone.bgBottom), accent = Color(zone.accent),
+            particle = zone.elements.first().particle, intensity = 1f,
+        )
         Canvas(Modifier.fillMaxSize()) {
-            drawRect(Brush.verticalGradient(listOf(Color(zone.bgTop), Color(zone.bgBottom))))
-            // sun / glow
-            drawCircle(Color.White.copy(alpha = 0.25f), radius = size.minDimension * 0.3f, center = Offset(size.width * 0.8f, size.height * 0.12f))
-            // hills
-            val hill = Path()
-            hill.moveTo(0f, size.height * 0.82f)
-            hill.quadraticBezierTo(size.width * 0.25f, size.height * 0.70f, size.width * 0.5f, size.height * 0.82f)
-            hill.quadraticBezierTo(size.width * 0.75f, size.height * 0.90f, size.width, size.height * 0.80f)
-            hill.lineTo(size.width, size.height); hill.lineTo(0f, size.height); hill.close()
-            drawPath(hill, Color(zone.accent).copy(alpha = 0.25f))
-            // ground
             drawOval(Color(zone.accent).copy(alpha = 0.18f), topLeft = Offset(-size.width * 0.1f, size.height * 0.80f), size = androidx.compose.ui.geometry.Size(size.width * 1.2f, size.height * 0.3f))
         }
 
@@ -229,7 +224,7 @@ fun BattleScene(
                 if (u.shield > 0) {
                     Box(Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(2.dp)).background(Color(0xFF42A5F5).copy(alpha = 0.8f)))
                 }
-                Text(u.name, fontSize = 9.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E2A33).copy(alpha = 0.8f), maxLines = 1, lineHeight = 11.sp)
+                Text(u.name, fontSize = 12.5.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2E2A33).copy(alpha = 0.85f), maxLines = 1, lineHeight = 13.sp)
             }
         }
 

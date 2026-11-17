@@ -1,6 +1,7 @@
 package com.f7developer.slimeverse.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,9 +36,9 @@ fun ResearchScreen(nav: NavController) {
             ResourcePill(Icons.Filled.School, formatNum(state.resources.research), Color(0xFF42A5F5), "RP")
             ResourcePill(Icons.Filled.Paid, formatNum(state.resources.gold), Color(0xFFFFB300), "Gold")
         }
-        Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(Modifier.padding(16.dp).horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             ResearchBranch.entries.forEach { b ->
-                FilterChip(branch == b, { branch = b }, { Text(b.displayName, fontSize = 12.sp) })
+                FilterChip(branch == b, { branch = b }, { Text(b.displayName, fontSize = 13.5.sp) })
             }
         }
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -50,7 +51,7 @@ fun ResearchScreen(nav: NavController) {
                         Column(Modifier.weight(1f)) {
                             Text(node.name, style = MaterialTheme.typography.titleMedium, color = if (done) MaterialTheme.colorScheme.onTertiaryContainer else MaterialTheme.colorScheme.onSurface)
                             Text(node.desc, fontSize = 12.5.sp, color = LocalExtraColors.current.inkSoft)
-                            if (!done) Text("${node.rpCost} RP · ${formatNum(node.goldCost)} gold", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(branch.color))
+                            if (!done) Text("${node.rpCost} RP · ${formatNum(node.goldCost)} gold", fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = Color(branch.color))
                         }
                         if (done) Icon(Icons.Filled.CheckCircle, null, tint = Color(0xFF43A047))
                         else SoftButton("Research", {
@@ -77,7 +78,7 @@ fun TalentsScreen(nav: NavController) {
                     Text("Breeder Talents", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                     ResourcePill(Icons.Filled.Stars, "${state.resources.talentPoints}", Color(0xFFFFB300), "Points")
                 }
-                Text("Earn points from breeder levels and achievements.", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                Text("Earn points from breeder levels and achievements.", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
             }
             BreederTalents.all.forEach { t ->
                 val level = state.talents[t.id] ?: 0
@@ -85,7 +86,7 @@ fun TalentsScreen(nav: NavController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text("${t.name} · Lv $level/${t.maxLevel}", style = MaterialTheme.typography.titleSmall)
-                            Text(t.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text(t.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         SoftButton("+${t.costPerLevel}", {
                             repo.act { if (!repo.engine.learnTalent(t.id)) repo.toast("No talent points.") }

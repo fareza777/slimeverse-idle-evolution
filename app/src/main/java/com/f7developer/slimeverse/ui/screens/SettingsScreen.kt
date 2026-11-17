@@ -81,7 +81,7 @@ fun SettingsScreen(nav: NavController) {
                         PrimaryButton("Buy · $price", { activity?.let { app.billing.launchPurchase(it) } }, modifier = Modifier.weight(1f), enabled = available, icon = Icons.Filled.ShoppingCart)
                         SoftButton("Restore", { app.billing.restorePurchases(); repo.toast("Checking purchases…") }, modifier = Modifier.weight(1f))
                     }
-                    if (!available) Text("Store unavailable right now. Try Restore later.", fontSize = 11.5.sp, color = LocalExtraColors.current.inkFaint)
+                    if (!available) Text("Store unavailable right now. Try Restore later.", fontSize = 13.sp, color = LocalExtraColors.current.inkFaint)
                 }
             }
             GameCard {
@@ -97,7 +97,7 @@ fun SettingsScreen(nav: NavController) {
             }
             GameCard {
                 Text("Privacy", style = MaterialTheme.typography.titleMedium)
-                SoftButton("Review ad consent", { activity?.let { app.consent.gatherConsent(it) {} } }, icon = Icons.Filled.PrivacyTip, modifier = Modifier.fillMaxWidth())
+                Text("Ads are provided by Google AdMob. A one-time Remove Ads purchase hides banners and interstitials. No account or personal data is required to play.", style = MaterialTheme.typography.bodySmall, color = LocalExtraColors.current.inkSoft)
             }
             Spacer(Modifier.height(16.dp))
         }

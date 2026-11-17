@@ -64,7 +64,7 @@ fun FuseScreen(nav: NavController) {
                         GameCard(color = MaterialTheme.colorScheme.surfaceVariant, corner = 14.dp) {
                             Text("Likely outcome", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                             Text("${fam.displayName} family · ${el.displayName} element", fontSize = 13.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
-                            Text("Rarity: ${Rarity.of(maxOf(a.rarity.order, b.rarity.order)).displayName}+ · Mutation ${String.format("%.0f", (Prestige.mutationChance(repo.state) + if (useMutagen) 0.2 else 0.0) * 100)}%", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text("Rarity: ${Rarity.of(maxOf(a.rarity.order, b.rarity.order)).displayName}+ · Mutation ${fmt0((Prestige.mutationChance(repo.state) + if (useMutagen) 0.2 else 0.0) * 100)}%", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         Spacer(Modifier.height(10.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -97,7 +97,7 @@ fun FuseScreen(nav: NavController) {
                     if (a != null && b != null) {
                         Spacer(Modifier.height(12.dp))
                         val (g, e) = repo.engine.breedCost(a, b)
-                        Text("Queue ${repo.state.breedJobs.size}/${Prestige.breedQueueCap(repo.state)} · gestation 2m then hatch", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                        Text("Queue ${repo.state.breedJobs.size}/${Prestige.breedQueueCap(repo.state)} · gestation 2m then hatch", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         Spacer(Modifier.height(8.dp))
                         PrimaryButton("Breed · ${formatNum(g)}g + ${formatNum(e)} essence", {
                             repo.act {
@@ -129,7 +129,7 @@ fun FuseScreen(nav: NavController) {
                     RuleToggle("Protect locked slimes", rules.keepLocked) { repo.act { repo.state.autoFuse.keepLocked = it } }
                     RuleToggle("Protect squad members", rules.keepSquad) { repo.act { repo.state.autoFuse.keepSquad = it } }
                     if (!("a4" in repo.state.research) && !Prestige.automationUnlocked(repo.state)) {
-                        Text("Unlock via Automation research (Auto-Fuse Rules).", fontSize = 12.sp, color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                        Text("Unlock via Automation research (Auto-Fuse Rules).", fontSize = 13.5.sp, color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -177,11 +177,11 @@ private fun ParentSlot(s: Slime?, label: String, modifier: Modifier = Modifier, 
     ) {
         if (s != null) {
             SlimeView(s.visual(), Modifier.size(72.dp), radiusFactor = 0.32f, animate = false)
-            Text(s.displayName, fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1)
-            Text("Lv ${s.level}", fontSize = 11.sp, color = LocalExtraColors.current.inkSoft)
+            Text(s.displayName, fontWeight = FontWeight.Bold, fontSize = 13.5.sp, maxLines = 1)
+            Text("Lv ${s.level}", fontSize = 12.5.sp, color = LocalExtraColors.current.inkSoft)
         } else {
             Box(Modifier.size(72.dp), contentAlignment = Alignment.Center) { Icon(Icons.Filled.AddCircleOutline, null, tint = LocalExtraColors.current.inkFaint, modifier = Modifier.size(36.dp)) }
-            Text(label, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+            Text(label, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
         }
     }
 }

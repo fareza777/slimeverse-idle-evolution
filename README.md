@@ -17,6 +17,7 @@ A deep, premium idle monster-breeding RPG for Android. Collect expressive slimes
 - **Multi-layer prestige.** Rebirth (Stardust) and Ascension (Aether Cores + the Aether element) with permanent perk trees.
 - **True offline play.** Your nest keeps working up to 48h. Reliable autosave with atomic writes, backup, and export/import.
 - **Premium UX.** Light fantasy theme by default (dark + auto available), playful bundled fonts, big readable text, native Android navigation insets respected.
+- **Living animation.** Every screen has a living animated background (drifting clouds, parallax hills, themed particles). The Nest is an animated idle-farm terrarium with wandering, bouncing slimes and rising resource orbs; expeditions show slimes marching a trail; battles have projectiles, bursts, floating damage, screen shake and blinking expressive slimes.
 - **Fair monetization.** AdMob banner/interstitial/optional rewarded with Google UMP consent, plus a one-time non-consumable **Remove Ads** ($4.99) via Play Billing with restore.
 
 ## Screenshots

@@ -2,6 +2,7 @@ package com.f7developer.slimeverse.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,9 +36,9 @@ fun BattleScreen(nav: NavController) {
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         SectionHeader("Battle", "Squad power ${formatNum(repo.engine.squadPower())}")
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.horizontalScroll(rememberScrollState())) {
             listOf("Campaign", "Squad", "Tower", "Dungeons", "Daily").forEachIndexed { i, label ->
-                FilterChip(tab == i, { tab = i }, { Text(label, fontSize = 12.sp) })
+                FilterChip(tab == i, { tab = i }, { Text(label, fontSize = 13.5.sp) })
             }
         }
         when (tab) {
@@ -81,8 +82,8 @@ private fun CampaignTab(nav: NavController) {
                 ) {
                     Box(Modifier.fillMaxWidth().height(40.dp).clip(RoundedCornerShape(8.dp)).background(Color(zd.bgTop)))
                     Spacer(Modifier.height(6.dp))
-                    Text(zd.name, fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1, color = if (open) MaterialTheme.colorScheme.onSurface else LocalExtraColors.current.inkFaint)
-                    Text(if (open) "Best ${state.maxStage(zd.index)}/10" else "Locked", fontSize = 10.5.sp, color = LocalExtraColors.current.inkSoft)
+                    Text(zd.name, fontWeight = FontWeight.Bold, fontSize = 13.5.sp, maxLines = 1, color = if (open) MaterialTheme.colorScheme.onSurface else LocalExtraColors.current.inkFaint)
+                    Text(if (open) "Best ${state.maxStage(zd.index)}/10" else "Locked", fontSize = 12.5.sp, color = LocalExtraColors.current.inkSoft)
                 }
             }
         }
@@ -108,7 +109,7 @@ private fun CampaignTab(nav: NavController) {
                     Icon(if (boss) Icons.Filled.Whatshot else if (cleared) Icons.Filled.CheckCircle else Icons.Filled.RadioButtonUnchecked, null, tint = if (boss) Color(0xFFFF7043) else if (cleared) Color(0xFF43A047) else LocalExtraColors.current.inkFaint, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(10.dp))
                     Text(if (boss) "Boss Stage" else "Stage $stage", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.weight(1f))
-                    if (isFarm) Text("FARMING", fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.tertiary)
+                    if (isFarm) Text("FARMING", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.tertiary)
                     Icon(Icons.Filled.PlayArrow, null, tint = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(Modifier.height(6.dp))
@@ -131,12 +132,12 @@ private fun SquadTab(onPick: (Int) -> Unit) {
         Text("Formation", style = MaterialTheme.typography.titleMedium)
         Text("Front row (slots 1–2) is targeted first. Back row (3–5) is safer.", style = MaterialTheme.typography.bodySmall, color = LocalExtraColors.current.inkSoft)
         Spacer(Modifier.height(10.dp))
-        Text("FRONT", fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = LocalExtraColors.current.inkFaint)
+        Text("FRONT", fontSize = 12.5.sp, fontWeight = FontWeight.ExtraBold, color = LocalExtraColors.current.inkFaint)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             (0..1).forEach { slot -> SquadSlot(slot, Modifier.weight(1f), onPick) }
         }
         Spacer(Modifier.height(8.dp))
-        Text("BACK", fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, color = LocalExtraColors.current.inkFaint)
+        Text("BACK", fontSize = 12.5.sp, fontWeight = FontWeight.ExtraBold, color = LocalExtraColors.current.inkFaint)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             (2..4).forEach { slot -> SquadSlot(slot, Modifier.weight(1f), onPick) }
         }
@@ -144,7 +145,7 @@ private fun SquadTab(onPick: (Int) -> Unit) {
         val synergies = repo.engine.squadSynergy()
         if (synergies.isNotEmpty()) {
             Text("Synergies", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-            synergies.forEach { Text("• $it", fontSize = 12.sp, color = Color(0xFF43A047), fontWeight = FontWeight.SemiBold) }
+            synergies.forEach { Text("• $it", fontSize = 13.5.sp, color = Color(0xFF43A047), fontWeight = FontWeight.SemiBold) }
             Spacer(Modifier.height(8.dp))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -178,10 +179,10 @@ private fun SquadSlot(slot: Int, modifier: Modifier = Modifier, onPick: (Int) ->
     ) {
         if (s != null) {
             SlimeView(s.visual(), Modifier.size(56.dp), radiusFactor = 0.32f, animate = false)
-            Text(s.displayName, fontSize = 10.5.sp, fontWeight = FontWeight.Bold, maxLines = 1)
+            Text(s.displayName, fontSize = 12.5.sp, fontWeight = FontWeight.Bold, maxLines = 1)
         } else {
             Box(Modifier.size(56.dp), contentAlignment = Alignment.Center) { Icon(Icons.Filled.Add, null, tint = LocalExtraColors.current.inkFaint) }
-            Text("Empty", fontSize = 10.5.sp, color = LocalExtraColors.current.inkFaint)
+            Text("Empty", fontSize = 12.5.sp, color = LocalExtraColors.current.inkFaint)
         }
     }
 }

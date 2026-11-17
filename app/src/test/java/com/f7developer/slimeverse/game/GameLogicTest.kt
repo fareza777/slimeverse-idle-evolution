@@ -138,6 +138,19 @@ class BattleTest {
     }
 
     @Test
+    fun firstStageReliablyWinnableAcrossSeeds() {
+        val state = GameEngine.newGame(1L)
+        val squad = state.squad.mapIndexedNotNull { i, uid -> state.slime(uid)?.let { it to i } }
+        var wins = 0
+        val trials = 60
+        for (seed in 1L..trials) {
+            val battle = BattleFactory.stageBattle(squad, 0, 1, seed * 131)
+            if (battle.resolve() == BattleResult.WIN) wins++
+        }
+        assertTrue("starter squad should win stage 1 >=90% of the time, won $wins/$trials", wins >= trials * 9 / 10)
+    }
+
+    @Test
     fun battleTerminates() {
         val state = GameEngine.newGame(1L)
         val squad = state.squad.mapIndexedNotNull { i, uid -> state.slime(uid)?.let { it to i } }

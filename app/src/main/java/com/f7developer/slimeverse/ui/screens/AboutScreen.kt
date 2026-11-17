@@ -57,7 +57,7 @@ fun AboutScreen(nav: NavController) {
                 PrimaryButton("Rate app", { rateApp(context) }, modifier = Modifier.weight(1f), icon = Icons.Filled.Star)
                 SoftButton("Share", { shareApp(context) }, modifier = Modifier.weight(1f), icon = Icons.Filled.Share)
             }
-            Text("© 2026 F7 Developer. All rights reserved.", fontSize = 11.5.sp, color = LocalExtraColors.current.inkFaint)
+            Text("© 2026 F7 Developer. All rights reserved.", fontSize = 13.sp, color = LocalExtraColors.current.inkFaint)
             Spacer(Modifier.height(16.dp))
         }
     }

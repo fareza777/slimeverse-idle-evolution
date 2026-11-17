@@ -114,11 +114,18 @@ object Balance {
         val growth = levelGrowth(lvl)
         val zoneMult = 1.0 + zone * 0.10
         val bossMult = if (boss) 3.4 else 1.0
+        // Early-game easing so the opening stages are a confident win for a fresh squad.
+        val ease = when {
+            boss -> 1.0
+            zone == 0 -> 0.60 + 0.04 * (stage - 1)
+            zone == 1 -> 0.85 + 0.015 * (stage - 1)
+            else -> 1.0
+        }
         val rm = rarity.mult
         return BaseStats(
-            base.hp * growth * zoneMult * bossMult * rm,
-            base.atk * growth * zoneMult * (if (boss) 1.5 else 1.0) * rm,
-            base.def * growth * zoneMult * (if (boss) 1.4 else 1.0) * rm,
+            base.hp * growth * zoneMult * bossMult * rm * ease,
+            base.atk * growth * zoneMult * (if (boss) 1.5 else 1.0) * rm * ease,
+            base.def * growth * zoneMult * (if (boss) 1.4 else 1.0) * rm * ease,
             base.spd * growth * (if (boss) 1.1 else 1.0),
             base.crit + zone * 0.8,
         )

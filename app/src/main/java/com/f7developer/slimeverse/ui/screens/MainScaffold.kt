@@ -60,6 +60,16 @@ fun MainScaffold(nav: NavController) {
         Column(Modifier.fillMaxSize()) {
             ResourceBar(nav)
             Box(Modifier.weight(1f)) {
+                val light = LocalExtraColors.current.isLight
+                com.f7developer.slimeverse.ui.render.LivingBackground(
+                    Modifier.fillMaxSize(),
+                    top = if (light) Color(0xFFFFF6EC) else Color(0xFF17141F),
+                    bottom = if (light) Color(0xFFF3E9FF) else Color(0xFF221E2E),
+                    accent = if (light) Color(0xFFB39DFF) else Color(0xFF7C4DFF),
+                    particle = com.f7developer.slimeverse.game.ParticleStyle.STAR,
+                    dark = !light,
+                    intensity = 0.45f,
+                )
                 when (tab) {
                     0 -> HomeScreen(nav)
                     1 -> CollectionScreen(nav)
@@ -102,7 +112,7 @@ private fun ResourceBar(nav: NavController) {
         Box(
             Modifier.clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.primaryContainer).padding(horizontal = 8.dp, vertical = 6.dp)
         ) {
-            Text("Lv ${repo.state.breederLevel}", fontWeight = FontWeight.ExtraBold, fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Text("Lv ${repo.state.breederLevel}", fontWeight = FontWeight.ExtraBold, fontSize = 13.5.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
         }
     }
 }
@@ -114,24 +124,24 @@ private fun BottomNav(selected: Int, onSelect: (Int) -> Unit) {
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .navigationBarsPadding()
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .padding(horizontal = 4.dp, vertical = 8.dp),
     ) {
         tabs.forEachIndexed { i, t ->
             val sel = i == selected
             Column(
                 modifier = Modifier
+                    .weight(1f)
                     .clip(RoundedCornerShape(16.dp))
                     .clickable { onSelect(i) }
-                    .padding(horizontal = 14.dp, vertical = 6.dp),
+                    .padding(vertical = 6.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
-                    Modifier.clip(RoundedCornerShape(12.dp)).background(if (sel) MaterialTheme.colorScheme.primaryContainer else Color.Transparent).padding(horizontal = 16.dp, vertical = 4.dp)
+                    Modifier.clip(RoundedCornerShape(12.dp)).background(if (sel) MaterialTheme.colorScheme.primaryContainer else Color.Transparent).padding(horizontal = 14.dp, vertical = 4.dp)
                 ) {
                     Icon(if (sel) t.active else t.icon, t.label, tint = if (sel) MaterialTheme.colorScheme.primary else LocalExtraColors.current.inkFaint, modifier = Modifier.size(24.dp))
                 }
-                Text(t.label, fontSize = 11.sp, fontWeight = if (sel) FontWeight.ExtraBold else FontWeight.SemiBold, color = if (sel) MaterialTheme.colorScheme.primary else LocalExtraColors.current.inkFaint)
+                Text(t.label, fontSize = 12.5.sp, maxLines = 1, softWrap = false, fontWeight = if (sel) FontWeight.ExtraBold else FontWeight.SemiBold, color = if (sel) MaterialTheme.colorScheme.primary else LocalExtraColors.current.inkFaint)
             }
         }
     }
@@ -152,7 +162,7 @@ private fun OfflineModal(report: com.f7developer.slimeverse.game.OfflineReport) 
         ) {
             Text("Welcome back!", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onSurface)
             val hrs = report.elapsedMs / 3_600_000.0
-            Text("Your slimes kept working for ${String.format("%.1f", hrs)}h (cap ${report.cappedHours}h).", style = MaterialTheme.typography.bodyMedium, color = LocalExtraColors.current.inkSoft, textAlign = TextAlign.Center)
+            Text("Your slimes kept working for ${fmt1(hrs)}h (cap ${report.cappedHours}h).", style = MaterialTheme.typography.bodyMedium, color = LocalExtraColors.current.inkSoft, textAlign = TextAlign.Center)
             GameCard(color = MaterialTheme.colorScheme.surfaceVariant, corner = 16.dp) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (report.clears > 0) RewardRow("Idle battles", "${report.clears} clears")

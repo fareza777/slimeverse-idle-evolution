@@ -39,6 +39,13 @@ fun HomeScreen(nav: NavController) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         SectionHeader("Your Nest", "Squad power ${formatNum(repo.engine.squadPower())}")
+        // Living idle-farm terrarium
+        val herd = repo.state.squadSlimes().map { it.visual() }.ifEmpty { listOf(mascotVisual) }
+        com.f7developer.slimeverse.ui.render.HabitatScene(
+            herd,
+            Modifier.fillMaxWidth().height(210.dp),
+            producing = repo.state.habitats.any { it.assigned.isNotEmpty() } || repo.state.squadSlimes().isNotEmpty(),
+        )
         // Hatchery
         GameCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -59,7 +66,7 @@ fun HomeScreen(nav: NavController) {
                         Spacer(Modifier.width(8.dp))
                         Text("Breeding…", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                         Spacer(Modifier.weight(1f))
-                        Text("${String.format("%.1f", remain)}m", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
+                        Text("${fmt1(remain.toDouble())}m", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                     }
                 }
                 state.eggs.forEach { egg ->
@@ -105,7 +112,7 @@ fun HomeScreen(nav: NavController) {
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
                         Text("${kind.displayName} · Lv ${h.level}", style = MaterialTheme.typography.titleMedium)
-                        Text("${kind.produces} · ${String.format("%.1f", rate)}/hr", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+                        Text("${kind.produces} · ${fmt1(rate)}/hr", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
                     }
                     SoftButton("Upgrade", {
                         repo.act { if (!repo.engine.upgradeHabitat(k)) repo.toast("Need ${formatNum(Habitats.upgradeCost(h.level))} gold.") }
@@ -152,15 +159,20 @@ fun HomeScreen(nav: NavController) {
                 val prog = (1f - (exp.endsAt - System.currentTimeMillis()).toFloat() / total).coerceIn(0f, 1f)
                 val ready = exp.endsAt <= System.currentTimeMillis()
                 GameCard {
+                    com.f7developer.slimeverse.ui.render.ExpeditionMarch(
+                        exp.slimeUids.mapNotNull { state.slime(it)?.visual() },
+                        prog,
+                        Modifier.fillMaxWidth().height(64.dp),
+                    )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text(def.name, style = MaterialTheme.typography.titleMedium)
-                            Text("${exp.slimeUids.size} slimes · ${def.minutes}m", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text("${exp.slimeUids.size} slimes · ${def.minutes}m", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                             LinearProgress(prog, MaterialTheme.colorScheme.tertiary, Modifier.fillMaxWidth().padding(top = 6.dp), 6.dp)
                         }
                         Spacer(Modifier.width(10.dp))
                         if (ready) SoftButton("Claim", { repo.act { repo.engine.claimExpedition(exp.uid) } }, tint = Color(0xFF43A047))
-                        else Text("${((exp.endsAt - System.currentTimeMillis()) / 60000)}m left", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft)
+                        else Text("${((exp.endsAt - System.currentTimeMillis()) / 60000)}m left", fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft)
                     }
                 }
             }
@@ -207,7 +219,7 @@ fun SlimePickerDialog(title: String, filter: (Slime) -> Boolean, onPick: (Long) 
                         Spacer(Modifier.width(8.dp))
                         Column(Modifier.weight(1f)) {
                             Text(s.displayName, fontWeight = FontWeight.Bold, fontSize = 13.5.sp, maxLines = 1)
-                            Text("Lv ${s.level} · ${formatNum(repo.engine.slimePower(s))} pwr", fontSize = 11.5.sp, color = LocalExtraColors.current.inkSoft)
+                            Text("Lv ${s.level} · ${formatNum(repo.engine.slimePower(s))} pwr", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         if (multi && sel) Icon(Icons.Filled.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
                     }
@@ -240,7 +252,7 @@ private fun ExpeditionDialog(onDismiss: () -> Unit) {
                     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant).clickable { defId = d.id }.padding(10.dp)) {
                         Column(Modifier.weight(1f)) {
                             Text(d.name, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                            Text("${d.minutes}m · min ${formatNum(d.minPower)} pwr", fontSize = 11.5.sp, color = LocalExtraColors.current.inkSoft)
+                            Text("${d.minutes}m · min ${formatNum(d.minPower)} pwr", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         if (sel) Icon(Icons.Filled.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
                     }

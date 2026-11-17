@@ -52,7 +52,7 @@ Privacy policy URL: required before publication (host a page covering AdMob, UMP
 Ads: contains ads (banner + interstitial + optional rewarded); in-app purchases (Remove Ads, non-consumable)
 
 ## Name-conflict check (2026-11-17)
-Web search found established slime idle games (Legend of Slime, Slime Force, League of Slime) but no Google Play app titled exactly "Slimeverse: Idle Evolution RPG". The coined term "Slimeverse" has prior association with a blockchain/NFT project; the subtitle and F7 Developer branding differentiate this listing. RECOMMENDATION: run a trademark clearance search for "Slimeverse" in target markets before publishing, and confirm no live Play listing uses the exact name. The package id com.f7developer.slimeverse is unique.
+Web search found established slime idle games (Legend of Slime, Slime Force, League of Slime) but no Google Play app titled exactly "Slimeverse: Idle Evolution RPG". The coined term "Slimeverse" has prior association with a blockchain/NFT project; the subtitle and F7 Developer branding differentiate this listing. RECOMMENDATION: run a trademark clearance search for "Slimeverse" in target markets before publishing, and confirm no live Play listing uses the exact name. The package id com.f7developer.slimeverseidle is unique.
 
 ## Required graphic assets (in /aso)
 - icon_512.png (512×512 Play console icon)

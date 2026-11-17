@@ -70,7 +70,7 @@ private fun MenuItem(icon: ImageVector, title: String, subtitle: String, tint: C
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleMedium)
-                    Text(subtitle, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+                    Text(subtitle, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
                 }
                 Icon(Icons.AutoMirrored.Filled.ArrowForwardIos, null, tint = LocalExtraColors.current.inkFaint, modifier = Modifier.size(16.dp))
             }

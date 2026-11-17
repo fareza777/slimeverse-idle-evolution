@@ -56,13 +56,13 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
             // portrait
             Box(Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(24.dp)).background(Color(s.element.color).copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                 SlimeView(s.visual(), Modifier.size(200.dp), mood = Mood.HAPPY, radiusFactor = 0.34f)
-                if (s.prismatic) Text("PRISMATIC", Modifier.align(Alignment.TopEnd).padding(12.dp).clip(RoundedCornerShape(8.dp)).background(Color(0xFFE040FB).copy(alpha = 0.2f)).padding(horizontal = 8.dp, vertical = 4.dp), color = Color(0xFFE040FB), fontWeight = FontWeight.ExtraBold, fontSize = 11.sp)
+                if (s.prismatic) Text("PRISMATIC", Modifier.align(Alignment.TopEnd).padding(12.dp).clip(RoundedCornerShape(8.dp)).background(Color(0xFFE040FB).copy(alpha = 0.2f)).padding(horizontal = 8.dp, vertical = 4.dp), color = Color(0xFFE040FB), fontWeight = FontWeight.ExtraBold, fontSize = 12.5.sp)
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 ElementBadge(s.element)
                 if (s.secondary != null) ElementBadge(s.secondary!!, small = true)
                 RarityBadge(s.rarity)
-                Text("Tier ${s.tier}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft)
+                Text("Tier ${s.tier}", fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft)
                 Spacer(Modifier.weight(1f))
                 Text("${formatNum(repo.engine.slimePower(s))} pwr", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
             }
@@ -79,14 +79,14 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StatChip("SPD", String.format("%.1f", stats.spd), Color(0xFFFFCA28), Modifier.weight(1f))
+                    StatChip("SPD", fmt1(stats.spd), Color(0xFFFFCA28), Modifier.weight(1f))
                     StatChip("CRIT", "${stats.crit.toInt()}%", Color(0xFFEC407A), Modifier.weight(1f))
                     StatChip("LEVEL", "${s.level}", MaterialTheme.colorScheme.primary, Modifier.weight(1f))
                 }
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
-                        Text("XP ${formatNum(s.xp)} / ${formatNum(xpNeed)}", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+                        Text("XP ${formatNum(s.xp)} / ${formatNum(xpNeed)}", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
                         LinearProgress(s.xp.toFloat() / xpNeed, MaterialTheme.colorScheme.primary, Modifier.fillMaxWidth().padding(top = 4.dp))
                     }
                     Spacer(Modifier.width(10.dp))
@@ -104,7 +104,7 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                 val options = Species.evolveOptions(s.def)
                 GameCard {
                     Text("Evolution", style = MaterialTheme.typography.titleMedium)
-                    Text("Requires level $needLevel · ${formatNum(Balance.evolveEssence(s.tier, s.rarity))} essence · ${formatNum(Balance.evolveGold(s.tier, s.rarity))} gold", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                    Text("Requires level $needLevel · ${formatNum(Balance.evolveEssence(s.tier, s.rarity))} essence · ${formatNum(Balance.evolveGold(s.tier, s.rarity))} gold", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                     Spacer(Modifier.height(10.dp))
                     options.forEach { opt ->
                         val sel = evolveBranch == opt.branch
@@ -116,7 +116,7 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                             Spacer(Modifier.width(10.dp))
                             Column(Modifier.weight(1f)) {
                                 Text(opt.name, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                                Text(if (opt.branch == "a") "Bulwark path: HP & DEF" else "Striker path: ATK & SPD", fontSize = 11.5.sp, color = LocalExtraColors.current.inkSoft)
+                                Text(if (opt.branch == "a") "Bulwark path: HP & DEF" else "Striker path: ATK & SPD", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                             }
                             if (sel) Icon(Icons.Filled.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
                         }
@@ -143,7 +143,7 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                 Text("Skill · ${skill.name}", style = MaterialTheme.typography.titleMedium)
                 Text(skill.desc, style = MaterialTheme.typography.bodySmall, color = LocalExtraColors.current.inkSoft)
                 Spacer(Modifier.height(6.dp))
-                Text("Cooldown ${skill.cooldown} turns · Power ${String.format("%.2f", skill.power)}x", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                Text("Cooldown ${skill.cooldown} turns · Power ${fmt2(skill.power)}x", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             }
 
             // traits
@@ -153,7 +153,7 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                     Spacer(Modifier.height(8.dp))
                     s.traits.forEach { t ->
                         Text(t.displayName, fontWeight = FontWeight.Bold, fontSize = 13.5.sp, color = MaterialTheme.colorScheme.onTertiaryContainer)
-                        Text(t.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                        Text(t.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         Spacer(Modifier.height(6.dp))
                     }
                 }
@@ -165,7 +165,7 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                     Text("Genome", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                     SoftButton("Mutate · 3", { showMutate = true }, icon = Icons.Filled.Science, tint = Color(0xFFAB47BC))
                 }
-                Text("Dominant allele is expressed; recessive can pass to offspring.", fontSize = 11.5.sp, color = LocalExtraColors.current.inkSoft)
+                Text("Dominant allele is expressed; recessive can pass to offspring.", fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                 Spacer(Modifier.height(8.dp))
                 Locus.entries.forEach { locus ->
                     val pair = s.genome.pairs.getValue(locus)
@@ -173,12 +173,12 @@ fun SlimeDetailScreen(uid: Long, nav: NavController) {
                     val a = Genes.allele(pair.first); val b = Genes.allele(pair.second)
                     val recessive = if (expressed.id == a.id) b else a
                     Row(Modifier.fillMaxWidth().padding(vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(locus.displayName, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft, modifier = Modifier.width(70.dp))
+                        Text(locus.displayName, fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkSoft, modifier = Modifier.width(70.dp))
                         Box(Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.primaryContainer).padding(horizontal = 8.dp, vertical = 3.dp)) {
-                            Text(expressed.displayName + (if (expressed.rare) " ★" else ""), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                            Text(expressed.displayName + (if (expressed.rare) " ★" else ""), fontSize = 13.5.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                         }
                         Spacer(Modifier.width(6.dp))
-                        Text("(${recessive.displayName})", fontSize = 11.sp, color = LocalExtraColors.current.inkFaint)
+                        Text("(${recessive.displayName})", fontSize = 12.5.sp, color = LocalExtraColors.current.inkFaint)
                     }
                 }
             }

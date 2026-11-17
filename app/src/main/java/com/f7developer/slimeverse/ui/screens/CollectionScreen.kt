@@ -2,10 +2,12 @@ package com.f7developer.slimeverse.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -62,15 +64,15 @@ fun CollectionScreen(nav: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = MaterialTheme.typography.bodyMedium,
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                FilterChip(elementFilter == null, { elementFilter = null }, { Text("All", fontSize = 12.sp) })
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
+                FilterChip(elementFilter == null, { elementFilter = null }, { Text("All", fontSize = 13.sp) })
                 Element.entries.take(5).forEach { el ->
-                    FilterChip(elementFilter == el, { elementFilter = if (elementFilter == el) null else el }, { Text(el.short, fontSize = 12.sp) })
+                    FilterChip(elementFilter == el, { elementFilter = if (elementFilter == el) null else el }, { Text(el.short, fontSize = 13.sp) })
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
                 listOf("Power", "Level", "Rarity", "Newest").forEachIndexed { i, label ->
-                    FilterChip(sort == i, { sort = i }, { Text(label, fontSize = 12.sp) })
+                    FilterChip(sort == i, { sort = i }, { Text(label, fontSize = 13.sp) })
                 }
             }
         }
@@ -120,11 +122,11 @@ fun SlimeCard(s: Slime, power: Long, onClick: () -> Unit) {
             }
         }
         Spacer(Modifier.height(6.dp))
-        Text(s.displayName, fontWeight = FontWeight.Bold, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, color = MaterialTheme.colorScheme.onSurface)
+        Text(s.displayName, fontWeight = FontWeight.Bold, fontSize = 13.5.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, color = MaterialTheme.colorScheme.onSurface)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             Box(Modifier.size(8.dp).clip(CircleShape).background(Color(s.rarity.color)))
-            Text("Lv ${s.level}", fontSize = 10.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
+            Text("Lv ${s.level}", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft, fontWeight = FontWeight.SemiBold)
         }
-        Text("${formatNum(power)} pwr", fontSize = 10.5.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.ExtraBold)
+        Text("${formatNum(power)} pwr", fontSize = 13.5.sp, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.ExtraBold)
     }
 }

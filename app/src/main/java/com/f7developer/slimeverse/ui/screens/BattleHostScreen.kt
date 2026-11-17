@@ -8,6 +8,7 @@ import com.f7developer.slimeverse.SlimeverseApp
 import com.f7developer.slimeverse.ads.AdConfig
 import com.f7developer.slimeverse.data.BattleMode
 import com.f7developer.slimeverse.game.Prestige
+import com.f7developer.slimeverse.game.Zones
 import com.f7developer.slimeverse.ui.LocalRepo
 import com.f7developer.slimeverse.ui.render.BattleScene
 
@@ -20,22 +21,13 @@ fun BattleHostScreen(nav: NavController) {
     val context = LocalContext.current
     val app = context.applicationContext as SlimeverseApp
 
-    if (ab == null) {
-        LaunchedEffect(Unit) { nav.popBackStack() }
-        return
-    }
-    val current = ab!!
+    // No active battle -> render nothing; navigation is handled explicitly below.
+    val current = ab ?: return
 
-    fun afterContinue() {
-        val win = outcome?.win == true
-        val mode = current.mode
+    fun leaveBattle() {
         repo.clearOutcome()
-        if (win && mode == BattleMode.TOWER) {
-            repo.startTowerBattle()
-        } else {
-            repo.stopBattle()
-            nav.popBackStack()
-        }
+        nav.popBackStack()
+        repo.stopBattle()
     }
 
     BattleScene(
@@ -45,17 +37,26 @@ fun BattleHostScreen(nav: NavController) {
         speed = repo.state.settings.battleSpeed,
         maxSpeed = Prestige.battleSpeedMax(repo.state),
         onSpeed = { repo.act { repo.state.settings.battleSpeed = it } },
-        onExit = { repo.stopBattle(); repo.clearOutcome(); nav.popBackStack() },
+        onExit = { leaveBattle() },
         onContinue = {
+            val win = outcome?.win == true
+            val mode = current.mode
+            val meaningfulBreak = mode == BattleMode.DUNGEON || Zones.isBoss(current.stage)
+            // Navigate FIRST so the game never waits on an ad.
+            if (win && mode == BattleMode.TOWER) {
+                repo.clearOutcome()
+                repo.startTowerBattle()
+            } else {
+                leaveBattle()
+            }
+            // Interstitial only at meaningful breaks, after navigation, frequency-capped.
             val now = System.currentTimeMillis()
             val activity = context as? Activity
-            if (!repo.state.removeAds && activity != null && app.consent.canRequestAds &&
+            if (meaningfulBreak && !repo.state.removeAds && activity != null && app.consent.canRequestAds &&
                 now - repo.state.lastInterstitial > AdConfig.INTERSTITIAL_MIN_INTERVAL_MS
             ) {
                 repo.act { repo.state.lastInterstitial = now }
-                app.ads.showInterstitial(activity) { afterContinue() }
-            } else {
-                afterContinue()
+                app.ads.showInterstitial(activity) {}
             }
         },
         showDamage = repo.state.settings.showDamageNumbers,

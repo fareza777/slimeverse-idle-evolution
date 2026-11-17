@@ -54,7 +54,7 @@ fun CodexScreen(nav: NavController) {
                                     Text("?", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = LocalExtraColors.current.inkFaint)
                                 }
                             }
-                            Text(if (found) sp.name else "???", fontSize = 9.5.sp, fontWeight = FontWeight.Bold, maxLines = 1, textAlign = TextAlign.Center, color = if (found) MaterialTheme.colorScheme.onSurface else LocalExtraColors.current.inkFaint)
+                            Text(if (found) sp.name else "???", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, maxLines = 1, textAlign = TextAlign.Center, color = if (found) MaterialTheme.colorScheme.onSurface else LocalExtraColors.current.inkFaint)
                         }
                     }
                 }
@@ -63,12 +63,12 @@ fun CodexScreen(nav: NavController) {
                 Locus.entries.forEach { locus ->
                     GameCard {
                         Text(locus.displayName, style = MaterialTheme.typography.titleMedium)
-                        Text(locus.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                        Text(locus.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         Spacer(Modifier.height(6.dp))
                         Genes.pool(locus).forEach { a ->
                             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
                                 Text(a.displayName + (if (a.rare) " ★" else ""), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(110.dp), color = if (a.rare) Color(0xFFE040FB) else MaterialTheme.colorScheme.onSurface)
-                                Text("dom ${a.dominance}" + (a.trait?.let { " · ${it.displayName}" } ?: ""), fontSize = 11.5.sp, color = LocalExtraColors.current.inkSoft)
+                                Text("dom ${a.dominance}" + (a.trait?.let { " · ${it.displayName}" } ?: ""), fontSize = 13.sp, color = LocalExtraColors.current.inkSoft)
                             }
                         }
                     }
@@ -78,7 +78,7 @@ fun CodexScreen(nav: NavController) {
             else -> Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 GameCard {
                     Text("Fusion discoveries · ${state.codexFusions.size} / ${Families.fusionPairs.size}", style = MaterialTheme.typography.titleMedium)
-                    Text("Hybrid families: Seraph, Chimera, Titan, Phantom.", fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                    Text("Hybrid families: Seraph, Chimera, Titan, Phantom.", fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                 }
                 Families.fusionPairs.forEach { (a, b) ->
                     val key = repo.engine.fusionKey(a, b)
@@ -111,7 +111,7 @@ fun AscensionScreen(nav: NavController) {
                 Text("Reset zones and slime levels. Keep your collection, codex, research and talents. Gain Stardust for permanent multipliers.", style = MaterialTheme.typography.bodySmall, color = LocalExtraColors.current.inkSoft)
                 Spacer(Modifier.height(8.dp))
                 Text("Requires: clear Zone 6 · Gain: ${formatNum(repo.engine.rebirthGain())} Stardust", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                Text("Current bonus: +${String.format("%.0f", (Prestige.stardustMult(state) - 1) * 100)}% gold & essence", fontSize = 12.sp, color = Color(0xFFFFB300), fontWeight = FontWeight.Bold)
+                Text("Current bonus: +${fmt0((Prestige.stardustMult(state) - 1) * 100)}% gold & essence", fontSize = 13.sp, color = Color(0xFFFFB300), fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 PrimaryButton("Rebirth", { confirmRebirth = true }, enabled = repo.engine.canRebirth(), color = Color(0xFFFFB300), modifier = Modifier.fillMaxWidth())
             }
@@ -121,7 +121,7 @@ fun AscensionScreen(nav: NavController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text("${u.name} · Lv $level/${u.maxLevel}", style = MaterialTheme.typography.titleSmall)
-                            Text(u.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text(u.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         SoftButton("${RebirthUpgrades.cost(u.id, level)} ✦", {
                             repo.act { if (!repo.engine.buyRebirthUpgrade(u.id)) repo.toast("Not enough Stardust.") }
@@ -134,7 +134,7 @@ fun AscensionScreen(nav: NavController) {
                 Text("A deeper reset. Keep only Celestial slimes and your codex/perks. Gain Aether Cores for massive permanent power and the Aether element.", style = MaterialTheme.typography.bodySmall, color = LocalExtraColors.current.inkSoft)
                 Spacer(Modifier.height(8.dp))
                 Text("Requires: clear Zone 12 + Tower 50 · Gain: ${formatNum(repo.engine.ascendGain())} Aether", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                Text("Current bonus: +${String.format("%.0f", (Prestige.ascensionMult(state) / (if (AscensionPerks.has(state, "ap_stats")) 1.15 else 1.0) - 1) * 100)}% all stats", fontSize = 12.sp, color = Color(0xFFE040FB), fontWeight = FontWeight.Bold)
+                Text("Current bonus: +${fmt0((Prestige.ascensionMult(state) / (if (AscensionPerks.has(state, "ap_stats")) 1.15 else 1.0) - 1) * 100)}% all stats", fontSize = 13.sp, color = Color(0xFFE040FB), fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 PrimaryButton("Ascend", { confirmAscend = true }, enabled = repo.engine.canAscend(), color = Color(0xFFE040FB), modifier = Modifier.fillMaxWidth())
             }
@@ -144,7 +144,7 @@ fun AscensionScreen(nav: NavController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text(p.name, style = MaterialTheme.typography.titleSmall)
-                            Text(p.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text(p.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                         }
                         if (owned) Icon(Icons.Filled.CheckCircle, null, tint = Color(0xFF43A047))
                         else SoftButton("${p.cost} ◈", { repo.act { if (!repo.engine.buyAscensionPerk(p.id)) repo.toast("Not enough Aether.") } }, enabled = state.resources.aether >= p.cost, tint = Color(0xFFE040FB))
@@ -182,13 +182,13 @@ fun AchievementsScreen(nav: NavController) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f)) {
                             Text(a.name, style = MaterialTheme.typography.titleSmall)
-                            Text(a.desc, fontSize = 12.sp, color = LocalExtraColors.current.inkSoft)
+                            Text(a.desc, fontSize = 13.5.sp, color = LocalExtraColors.current.inkSoft)
                             if (!claimed) LinearProgress((value.toFloat() / a.threshold).coerceIn(0f, 1f), Color(0xFFFFB300), Modifier.fillMaxWidth().padding(top = 4.dp), 5.dp)
                         }
                         Spacer(Modifier.width(8.dp))
                         if (claimed) Icon(Icons.Filled.CheckCircle, null, tint = Color(0xFF43A047))
                         else if (done) SoftButton("Claim", { repo.act { repo.engine.claimAchievement(a.id) } }, tint = Color(0xFFFFB300))
-                        else Text("${formatNum(value)}/${formatNum(a.threshold)}", fontSize = 11.sp, color = LocalExtraColors.current.inkFaint, fontWeight = FontWeight.Bold)
+                        else Text("${formatNum(value)}/${formatNum(a.threshold)}", fontSize = 12.5.sp, color = LocalExtraColors.current.inkFaint, fontWeight = FontWeight.Bold)
                     }
                 }
             }
